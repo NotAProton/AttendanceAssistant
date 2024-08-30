@@ -85,3 +85,9 @@ pages_build_output_dir = ".vercel/output/static"
 # [[env.production.kv_namespaces]]
 # binding = "MY_KV_NAMESPACE"
 # id = "<PRODUCTION_NAMESPACE_ID>"
+
+[[d1_databases]]
+binding = "DB" # i.e. available in your Worker on env.DB
+database_name = "attendance-dev"
+database_id = "5e35a410-a8cb-4b47-8ad1-afd761f724bd"
+

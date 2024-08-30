@@ -1,5 +1,5 @@
 {
-  "name": "my-next-app",
+  "name": "attendance",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -13,9 +13,17 @@
     "cf-typegen": "wrangler types --env-interface CloudflareEnv env.d.ts"
   },
   "dependencies": {
+    "@mantine/core": "^7.12.1",
+    "@mantine/dates": "^7.12.1",
+    "@mantine/form": "^7.12.1",
+    "@mantine/hooks": "^7.12.1",
+    "@mantine/notifications": "^7.12.1",
+    "@tanstack/react-query": "^5.52.1",
+    "dayjs": "^1.11.13",
     "next": "14.2.5",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "zustand": "^4.5.5"
   },
   "devDependencies": {
     "@cloudflare/next-on-pages": "^1.13.2",
@@ -26,7 +34,9 @@
     "eslint": "^8",
     "eslint-config-next": "14.2.5",
     "eslint-plugin-next-on-pages": "^1.13.2",
-    "postcss": "^8",
+    "postcss": "^8.4.41",
+    "postcss-preset-mantine": "^1.17.0",
+    "postcss-simple-vars": "^7.0.1",
     "tailwindcss": "^3.4.1",
     "typescript": "^5",
     "vercel": "^37.1.0",
