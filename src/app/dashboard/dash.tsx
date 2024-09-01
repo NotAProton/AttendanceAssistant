@@ -55,9 +55,9 @@ export type NegativeClass =
     }
   | {
       type: "rangedHoliday";
-      date: Date;
+      start: Date;
       reason: string;
-      duration: number;
+      end: Date;
     }
   | {
       type: "cancelled";
@@ -82,9 +82,9 @@ function getNegativeClasses(
   holidayRanges.forEach((holiday) => {
     negativeClasses.push({
       type: "rangedHoliday",
-      date: holiday.start,
+      start: holiday.start,
+      end: holiday.end,
       reason: "Ranged Holiday",
-      duration: holiday.end.getDate() - holiday.start.getDate() + 1,
     });
   });
 

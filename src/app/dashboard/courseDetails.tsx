@@ -59,7 +59,14 @@ export default function CourseDetails(props: CourseDetailsProps) {
           <>
             <div className="w-fit">Classes Cancelled: </div>
             {props.classesCancelled.map((c) => (
-              <NegativeDatePill key={c.date.toISOString()} negativeClass={c} />
+              <NegativeDatePill
+                key={
+                  c.type === "rangedHoliday"
+                    ? c.start.toISOString()
+                    : c.date.toISOString()
+                }
+                negativeClass={c}
+              />
             ))}
           </>
         ) : (
@@ -160,13 +167,11 @@ function NegativeDatePill({ negativeClass }: { negativeClass: NegativeClass }) {
       </Tooltip>
     );
   } else if (negativeClass.type === "rangedHoliday") {
-    let endDate = new Date(negativeClass.date);
-    endDate.setDate(endDate.getDate() + negativeClass.duration);
     return (
       <Tooltip label={negativeClass.reason}>
         <div className="rounded-md text-neutral-600 bg-zinc-300 justify-center p-1 py-0.5 text-sm">
-          <FormattedDate date={negativeClass.date} /> -{" "}
-          <FormattedDate date={endDate} />
+          <FormattedDate date={negativeClass.start} /> -{" "}
+          <FormattedDate date={negativeClass.end} />
         </div>
       </Tooltip>
     );
