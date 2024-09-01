@@ -27,6 +27,7 @@ export interface Holidays {
 export type rangedHolidays = {
   start: Date;
   end: Date;
+  reason: string;
 };
 
 export interface ResponseCourse {
@@ -136,7 +137,11 @@ export async function GET(request: NextRequest) {
       let startDate = new Date(holiday.date);
       let endDate = new Date(startDate);
       endDate.setDate(endDate.getDate() + holiday.days - 1);
-      rangedHolidays.push({ start: startDate, end: endDate });
+      rangedHolidays.push({
+        start: startDate,
+        end: endDate,
+        reason: holiday.reason,
+      });
     }
   });
 

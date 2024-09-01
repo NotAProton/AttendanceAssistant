@@ -1,5 +1,14 @@
--- Courses table
+-- Enable foreign key constraints
+PRAGMA foreign_keys = ON;
+
+-- Drop tables in reverse order of dependency
+DROP TABLE IF EXISTS extra;
+DROP TABLE IF EXISTS cancelled;
+DROP TABLE IF EXISTS schedule;
 DROP TABLE IF EXISTS courses;
+DROP TABLE IF EXISTS holidays;
+
+-- Courses table
 CREATE TABLE courses (
     course_code TEXT PRIMARY KEY,
     year INTEGER NOT NULL,
@@ -13,7 +22,6 @@ VALUES
     ('ICS215', 2023, 'bc');
 
 -- Schedule table
-DROP TABLE IF EXISTS schedule;
 CREATE TABLE schedule (
     course_code TEXT NOT NULL,
     batch INTEGER NOT NULL,
@@ -35,7 +43,6 @@ INSERT INTO schedule (course_code, batch, lab_set, monday, tuesday, wednesday, t
 VALUES ('ICS215', 3, 0, 0, 0, 1, 1, 0);
 
 -- Cancelled table
-DROP TABLE IF EXISTS cancelled;
 CREATE TABLE cancelled (
     course_code TEXT NOT NULL,
     batch INTEGER NOT NULL,
@@ -46,7 +53,6 @@ CREATE TABLE cancelled (
 );
 
 -- Holidays table
-DROP TABLE IF EXISTS holidays;
 CREATE TABLE holidays (
     date TEXT PRIMARY KEY,
     days INTEGER NOT NULL DEFAULT 1,
@@ -55,10 +61,11 @@ CREATE TABLE holidays (
 
 -- Add sample data to holidays table
 INSERT INTO holidays (date, days, reason)
-VALUES ('2024-08-15', 1, 'Independence Day');
+VALUES 
+    ('2024-08-15', 1, 'Independence Day'),
+    ('2024-11-18', 13, 'End Semester Exams');
 
 -- Extra table
-DROP TABLE IF EXISTS extra;
 CREATE TABLE extra (
     course_code TEXT NOT NULL,
     batch INTEGER NOT NULL,

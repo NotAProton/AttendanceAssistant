@@ -26,7 +26,10 @@ export default function CourseDetails(props: CourseDetailsProps) {
       props.classesMissed
   );
   return (
-    <div className="bg-slate-100 p-4 text-zinc-600 font-semibold lg:pr-10 rounded-b-xl border-2 border-t-0 border-slate-200">
+    <div
+      className="bg-slate-100 p-4 text-zi
+    nc-600 font-semibold lg:pr-10 rounded-b-xl border-2 border-t-0 border-slate-200"
+    >
       <div className="grid sm:grid-rows-1 sm:grid-flow-col justify-between items-center gap-3 pb-1">
         <div className="w-fit">
           <div className="border-b-2 border-slate-400 grid grid-rows-1 grid-flow-col justify-between items-center gap-3 pb-1">

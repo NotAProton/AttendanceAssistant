@@ -71,28 +71,54 @@ function getNegativeClasses(
 ): NegativeClass[] {
   const negativeClasses: NegativeClass[] = [];
 
-  holidays.forEach((holiday) => {
+  classesCancelled.forEach((date) => {
     negativeClasses.push({
-      type: "holiday",
-      date: new Date(holiday.date),
-      reason: holiday.reason,
+      type: "cancelled",
+      date: new Date(date),
     });
   });
 
   holidayRanges.forEach((holiday) => {
     negativeClasses.push({
       type: "rangedHoliday",
-      start: holiday.start,
-      end: holiday.end,
-      reason: "Ranged Holiday",
+      start: new Date(holiday.start),
+      end: new Date(holiday.end),
+      reason: holiday.reason,
     });
   });
 
-  classesCancelled.forEach((date) => {
-    negativeClasses.push({
-      type: "cancelled",
-      date,
-    });
+  holidays.forEach((holiday) => {
+    // dont include if already included in ranged holidays
+    if (
+      !holidayRanges.find(
+        (rangedHoliday) =>
+          rangedHoliday.start <= holiday.date &&
+          rangedHoliday.end >= holiday.date
+      )
+    ) {
+      negativeClasses.push({
+        type: "holiday",
+        date: new Date(holiday.date),
+        reason: holiday.reason,
+      });
+    }
+  });
+
+  // sort by date or start date
+  negativeClasses.sort((a, b) => {
+    if (a.type === "cancelled" && b.type === "cancelled") {
+      return a.date.getTime() - b.date.getTime();
+    } else if (a.type === "holiday" && b.type === "holiday") {
+      return a.date.getTime() - b.date.getTime();
+    } else if (a.type === "rangedHoliday" && b.type === "rangedHoliday") {
+      return a.start.getTime() - b.start.getTime();
+    } else if (a.type === "cancelled") {
+      return -1;
+    } else if (a.type === "holiday" && b.type === "rangedHoliday") {
+      return -1;
+    } else {
+      return 1;
+    }
   });
 
   return negativeClasses;
