@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Form from "./form";
+import Footer from "../footer";
 
 export default function CredentialsPage() {
   return (
@@ -22,16 +23,13 @@ export default function CredentialsPage() {
       </header>
 
       {/* Main Content */}
-      <main className="flex-grow bg-gradient-radial py-20">
+      <main className="flex-grow bg-gradient-radial py-20 min-h-[80vh]">
         <div className="container mx-auto px-4 max-w-md">
           <Form />
         </div>
       </main>
 
-      {/* Footer */}
-      <footer className="bg-gray-200 py-4 text-center">
-        <p>Made by Akshat</p>
-      </footer>
+      <Footer />
     </div>
   );
 }

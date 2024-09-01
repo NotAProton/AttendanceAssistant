@@ -1,10 +1,14 @@
 type HolidayRow = {
   date: string;
+  days: number;
+  reason: string;
 };
 
 export async function getHolidays(db: D1Database) {
   const holidayDates = (
-    await db.prepare("SELECT date FROM holidays").all<HolidayRow>()
+    await db
+      .prepare("SELECT date, days, reason FROM holidays")
+      .all<HolidayRow>()
   ).results;
 
   return holidayDates;
@@ -12,8 +16,6 @@ export async function getHolidays(db: D1Database) {
 
 type CoursesRow = {
   course_code: string;
-  year: number;
-  branch: string;
 };
 
 export async function getCourses(db: D1Database, year: number, branch: string) {
@@ -36,6 +38,7 @@ export async function getCourses(db: D1Database, year: number, branch: string) {
 type ScheduleRow = {
   course_code: string;
   batch: number;
+  lab_set: number;
   monday: number;
   tuesday: number;
   wednesday: number;
@@ -64,20 +67,21 @@ export async function getSchedule(
 }
 
 type CancelledClassesRow = {
-  course_code: string;
-  batch: number;
   date: string;
 };
 
 export async function getCancelledClasses(
   db: D1Database,
   course: string,
-  batch: number
+  batch: number,
+  set: number
 ) {
   const cancelledClasses = (
     await db
-      .prepare("SELECT date FROM cancelled WHERE course_code = ? AND batch = ?")
-      .bind(course, batch)
+      .prepare(
+        "SELECT date FROM cancelled WHERE course_code = ? AND batch = ? AND (lab_set = 0 OR lab_set = ?)"
+      )
+      .bind(course, batch, set)
       .all<CancelledClassesRow>()
   ).results;
 
@@ -85,20 +89,21 @@ export async function getCancelledClasses(
 }
 
 type ExtraClassesRow = {
-  course_code: string;
-  batch: number;
   date: string;
 };
 
 export async function getExtraClasses(
   db: D1Database,
   course: string,
-  batch: number
+  batch: number,
+  set: number
 ) {
   const extraClasses = (
     await db
-      .prepare("SELECT date FROM extra WHERE course_code = ? AND batch = ?")
-      .bind(course, batch)
+      .prepare(
+        "SELECT date FROM extra WHERE course_code = ? AND batch = ? AND (lab_set = 0 OR lab_set = ?)"
+      )
+      .bind(course, batch, set)
       .all<ExtraClassesRow>()
   ).results;
 

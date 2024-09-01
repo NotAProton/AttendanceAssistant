@@ -10,7 +10,11 @@ import { Accordion } from "@mantine/core";
 
 import { MantineProvider } from "@mantine/core";
 
-import type { ResponseCourse } from "@/app/api/data/route";
+import type {
+  ResponseCourse,
+  Holidays,
+  rangedHolidays,
+} from "@/app/api/data/route";
 import CourseDetails from "./courseDetails";
 import { use, useEffect, useState } from "react";
 import { useDataStore } from "../store";
@@ -32,34 +36,6 @@ async function fetchCourses() {
   return res.json<ResponseCourse[]>();
 }
 
-async function dummyFetchCourses() {
-  const res = {
-    json: async () => [
-      {
-        courseCode: "CS101",
-        classesCompleted: 10,
-        classesRemaining: 20,
-        classesCancelled: 2,
-        extraClasses: 0,
-        holidays: [
-          { date: "2023-09-01" },
-          { date: "2023-09-02" },
-          { date: "2023-09-03" },
-        ],
-      },
-      {
-        courseCode: "CS102",
-        classesCompleted: 15,
-        classesRemaining: 15,
-        classesCancelled: 0,
-        extraClasses: 0,
-        holidays: [],
-      },
-    ],
-  };
-  return res.json();
-}
-
 interface Attendance {
   subject: string;
   classesMissed: number;
@@ -68,6 +44,58 @@ interface Attendance {
 interface User {
   rollNumber: string;
   attendance: Attendance[];
+}
+
+// use for display of -ve classes
+export type NegativeClass =
+  | {
+      type: "holiday";
+      date: Date;
+      reason: string;
+    }
+  | {
+      type: "rangedHoliday";
+      date: Date;
+      reason: string;
+      duration: number;
+    }
+  | {
+      type: "cancelled";
+      date: Date;
+    };
+
+function getNegativeClasses(
+  holidays: Holidays[],
+  holidayRanges: rangedHolidays[],
+  classesCancelled: Date[]
+): NegativeClass[] {
+  const negativeClasses: NegativeClass[] = [];
+
+  holidays.forEach((holiday) => {
+    negativeClasses.push({
+      type: "holiday",
+      date: new Date(holiday.date),
+      reason: holiday.reason,
+    });
+  });
+
+  holidayRanges.forEach((holiday) => {
+    negativeClasses.push({
+      type: "rangedHoliday",
+      date: holiday.start,
+      reason: "Ranged Holiday",
+      duration: holiday.end.getDate() - holiday.start.getDate() + 1,
+    });
+  });
+
+  classesCancelled.forEach((date) => {
+    negativeClasses.push({
+      type: "cancelled",
+      date,
+    });
+  });
+
+  return negativeClasses;
 }
 
 function Courses() {
@@ -135,8 +163,10 @@ function Courses() {
       <Accordion.Panel classNames={{ content: "p-0" }}>
         <CourseDetails
           classesConducted={course.classesCompleted}
-          classesCancelled={course.holidays.map(
-            (holiday) => new Date(holiday.date)
+          classesCancelled={getNegativeClasses(
+            course.holidays,
+            course.rangedHolidays,
+            course.classesCancelled
           )}
           extraClasses={[]}
           classesRemaining={course.classesRemaining}

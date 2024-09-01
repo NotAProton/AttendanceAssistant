@@ -19,18 +19,24 @@ function countWeekDays(days: number[], d0: Date, d1: Date) {
   return days.reduce(sum, 0);
 }
 
-interface Holidays {
+export interface Holidays {
   date: Date;
+  reason: string;
   weekday: number;
 }
+export type rangedHolidays = {
+  start: Date;
+  end: Date;
+};
 
 export interface ResponseCourse {
   courseCode: string;
   classesCompleted: number;
   classesRemaining: number;
   holidays: Holidays[];
-  classesCancelled: number;
-  extraClasses: number;
+  rangedHolidays: rangedHolidays[];
+  classesCancelled: Date[];
+  extraClasses: Date[];
 }
 
 function parseUrlParams(url: string): {
@@ -100,14 +106,38 @@ export async function GET(request: NextRequest) {
   // fetch courses of the year, branch from db
   const db = getRequestContext().env.DB;
 
-  // get holidays and calculate their weekdays
+  // get holidaysDates used for display, holidays used for calculation
   const holidayDates = await getHolidays(db);
   const holidays: Holidays[] = [];
   holidayDates.forEach((holiday) => {
-    holidays.push({
-      date: new Date(holiday.date),
-      weekday: new Date(holiday.date).getDay(),
-    });
+    if (holiday.days === 1) {
+      holidays.push({
+        date: new Date(holiday.date),
+        weekday: new Date(holiday.date).getDay(),
+        reason: holiday.reason,
+      });
+    } else {
+      let startDate = new Date(holiday.date);
+      for (let i = 0; i < holiday.days; i++) {
+        holidays.push({
+          date: new Date(startDate),
+          weekday: startDate.getDay(),
+          reason: holiday.reason,
+        });
+        startDate.setDate(startDate.getDate() + 1);
+      }
+    }
+  });
+
+  const rangedHolidays: rangedHolidays[] = [];
+
+  holidayDates.forEach((holiday) => {
+    if (holiday.days !== 1) {
+      let startDate = new Date(holiday.date);
+      let endDate = new Date(startDate);
+      endDate.setDate(endDate.getDate() + holiday.days - 1);
+      rangedHolidays.push({ start: startDate, end: endDate });
+    }
   });
 
   let courses;
@@ -150,7 +180,8 @@ export async function GET(request: NextRequest) {
     const classesCancelled = await getCancelledClasses(
       db,
       course.course_code,
-      batch
+      batch,
+      set
     );
 
     for (let cancelledClass of classesCancelled) {
@@ -174,7 +205,12 @@ export async function GET(request: NextRequest) {
       }
     }
 
-    const extraClasses = await getExtraClasses(db, course.course_code, batch);
+    const extraClasses = await getExtraClasses(
+      db,
+      course.course_code,
+      batch,
+      set
+    );
 
     for (let extraClass of extraClasses) {
       const date = new Date(extraClass.date);
@@ -190,8 +226,11 @@ export async function GET(request: NextRequest) {
       classesCompleted,
       classesRemaining,
       holidays: classesOnHolidays,
-      classesCancelled: classesCancelled.length,
-      extraClasses: extraClasses.length,
+      rangedHolidays,
+      classesCancelled: classesCancelled.map(
+        (cancelledClass) => new Date(cancelledClass.date)
+      ),
+      extraClasses: extraClasses.map((extraClass) => new Date(extraClass.date)),
     });
 
     //Get schedule from db of the course and batch

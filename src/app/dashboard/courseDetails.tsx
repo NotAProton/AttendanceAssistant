@@ -2,10 +2,13 @@
 
 import { useState } from "react";
 import NumberInput from "./NumberInput";
+import { Holidays } from "../api/data/route";
+import { NegativeClass } from "./dash";
+import { Tooltip } from "@mantine/core";
 
 type CourseDetailsProps = {
   classesConducted: number;
-  classesCancelled: Date[];
+  classesCancelled: NegativeClass[];
   extraClasses: Date[];
   classesRemaining: number;
   classesMissed: number;
@@ -55,8 +58,8 @@ export default function CourseDetails(props: CourseDetailsProps) {
         {props.classesCancelled && props.classesCancelled.length > 0 ? (
           <>
             <div className="w-fit">Classes Cancelled: </div>
-            {props.classesCancelled.map((date) => (
-              <DatePill key={date.toISOString()} date={date} />
+            {props.classesCancelled.map((c) => (
+              <NegativeDatePill key={c.date.toISOString()} negativeClass={c} />
             ))}
           </>
         ) : (
@@ -137,6 +140,37 @@ export default function CourseDetails(props: CourseDetailsProps) {
       </div>
     </div>
   );
+}
+
+function NegativeDatePill({ negativeClass }: { negativeClass: NegativeClass }) {
+  if (negativeClass.type === "cancelled") {
+    return (
+      <Tooltip label="Cancelled">
+        <div className="rounded-md text-neutral-600 bg-zinc-300 justify-center p-1 py-0.5 text-sm">
+          <FormattedDate date={negativeClass.date} />
+        </div>
+      </Tooltip>
+    );
+  } else if (negativeClass.type === "holiday") {
+    return (
+      <Tooltip label={negativeClass.reason}>
+        <div className="rounded-md text-neutral-600 bg-zinc-300 justify-center p-1 py-0.5 text-sm">
+          <FormattedDate date={negativeClass.date} />
+        </div>
+      </Tooltip>
+    );
+  } else if (negativeClass.type === "rangedHoliday") {
+    let endDate = new Date(negativeClass.date);
+    endDate.setDate(endDate.getDate() + negativeClass.duration);
+    return (
+      <Tooltip label={negativeClass.reason}>
+        <div className="rounded-md text-neutral-600 bg-zinc-300 justify-center p-1 py-0.5 text-sm">
+          <FormattedDate date={negativeClass.date} /> -{" "}
+          <FormattedDate date={endDate} />
+        </div>
+      </Tooltip>
+    );
+  }
 }
 
 function DatePill({ date }: { date: Date }) {
