@@ -17,7 +17,8 @@ import type {
 } from "@/app/api/data/route";
 import CourseDetails from "./courseDetails";
 import { use, useEffect, useState } from "react";
-import { useDataStore } from "../store";
+import { useDataStore } from "../../lib/store";
+import getCourseName from "../../lib/courseNames";
 
 const queryClient = new QueryClient();
 
@@ -31,8 +32,13 @@ export default function Dashboard() {
   );
 }
 
-async function fetchCourses() {
-  const res = await fetch("/api/data?year=2023&branch=bcy&roll=48");
+async function fetchCourses(lastRollNumber: string) {
+  const year = parseInt(lastRollNumber.slice(0, 4), 10);
+  const branch = lastRollNumber.slice(4, 7);
+  const roll = parseInt(lastRollNumber.slice(7), 10);
+  const res = await fetch(
+    `/api/data?year=${year}&branch=${branch}&roll=${roll}`
+  );
   return res.json<ResponseCourse[]>();
 }
 
@@ -125,11 +131,6 @@ function getNegativeClasses(
 }
 
 function Courses() {
-  const { data: courses, isLoading } = useQuery<ResponseCourse[]>({
-    queryKey: ["courses"],
-    queryFn: fetchCourses,
-  });
-
   const { lastRollNumber, users, addUser, updateUserAttendance } = useDataStore(
     (state) => ({
       lastRollNumber: state.lastRollNumber,
@@ -138,6 +139,11 @@ function Courses() {
       updateUserAttendance: state.updateUserAttendance,
     })
   );
+
+  const { data: courses, isLoading } = useQuery<ResponseCourse[]>({
+    queryKey: ["courses", lastRollNumber],
+    queryFn: () => fetchCourses(lastRollNumber),
+  });
 
   const [selectedCourse, setSelectedCourse] = useState<string | null>(null);
   const [selectedUserAttendance, setSelectedUserAttendance] = useState<
@@ -180,11 +186,12 @@ function Courses() {
       value={course.courseCode}
     >
       <Accordion.Control
-        className={`bg-[#e6eef6] hover:bg-[#d3e1f4] border-0 rounded-xl mt-1 text-xl transition-all ${
+        className={`bg-[#e6eef6] hover:bg-[#d3e1f4] border-0 rounded-xl mt-1 text-xl transition-all${
           selectedCourse == course.courseCode ? "rounded-b-none" : ""
         }`}
       >
-        {course.courseCode}
+        {course.courseCode}:{" "}
+        <span className="capitalize">{getCourseName(course.courseCode)}</span>
       </Accordion.Control>
       <Accordion.Panel classNames={{ content: "p-0" }}>
         <CourseDetails

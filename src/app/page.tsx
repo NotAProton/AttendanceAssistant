@@ -1,12 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
-import Footer from "./footer";
+import Footer from "../lib/footer";
+import PageVisitTelemetry from "../lib/pageVisitTelemetry";
 
 export default function LandingPage() {
   return (
     <div className="min-h-screen flex flex-col">
       <main className="flex-grow">
-        {/* Section 1 */}
         <section className="text-center pb-10 pt-20 lg:py-40 bg-gradient-radial">
           <div className="container mx-auto px-4 ">
             <Image
@@ -77,6 +77,7 @@ export default function LandingPage() {
         </section>
       </main>
       <Footer />
+      <PageVisitTelemetry />
     </div>
   );
 }

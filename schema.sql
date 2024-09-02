@@ -7,6 +7,7 @@ DROP TABLE IF EXISTS cancelled;
 DROP TABLE IF EXISTS schedule;
 DROP TABLE IF EXISTS courses;
 DROP TABLE IF EXISTS holidays;
+DROP TABLE IF EXISTS telemetry;
 
 -- Courses table
 CREATE TABLE courses (
@@ -15,11 +16,6 @@ CREATE TABLE courses (
     branch TEXT NOT NULL
 );
 
--- Add sample data to courses table
-INSERT INTO courses (course_code, year, branch)
-VALUES 
-    ('ICS214', 2023, 'bc'),
-    ('ICS215', 2023, 'bc');
 
 -- Schedule table
 CREATE TABLE schedule (
@@ -35,12 +31,6 @@ CREATE TABLE schedule (
     FOREIGN KEY (course_code) REFERENCES courses(course_code)
 );
 
--- Add sample data to schedule table
-INSERT INTO schedule (course_code, batch, lab_set, monday, tuesday, thursday)
-VALUES ('ICS214', 3, 6, 2, 1, 1);
-
-INSERT INTO schedule (course_code, batch, lab_set, monday, tuesday, wednesday, thursday, friday)
-VALUES ('ICS215', 3, 0, 0, 0, 1, 1, 0);
 
 -- Cancelled table
 CREATE TABLE cancelled (
@@ -73,4 +63,14 @@ CREATE TABLE extra (
     date TEXT NOT NULL,
     PRIMARY KEY (course_code, batch, date),
     FOREIGN KEY (course_code, batch, lab_set) REFERENCES schedule(course_code, batch, lab_set)
+);
+
+
+CREATE TABLE IF NOT EXISTS telemetry (
+    time TEXT,
+    trigger TEXT,
+    ip TEXT,
+    ua TEXT,
+    client_id TEXT,
+    value TEXT
 );

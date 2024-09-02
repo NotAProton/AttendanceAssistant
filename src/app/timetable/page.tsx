@@ -1,9 +1,8 @@
 import Image from "next/image";
-import Form from "./form";
+import Box from "./box";
 import Footer from "../../lib/footer";
 import Head from "next/head";
 import { ColorSchemeScript } from "@mantine/core";
-import PageVisitTelemetry from "@/lib/pageVisitTelemetry";
 
 export default function CredentialsPage() {
   return (
@@ -12,7 +11,7 @@ export default function CredentialsPage() {
         <ColorSchemeScript />
       </Head>
       <header className="shadow-md py-4">
-        <div className="container mx-auto px-4 flex items-center">
+        <div className="container mx-auto px-4">
           <a href="/" className="flex flex-row items-center">
             <Image
               src="/calendar.svg"
@@ -32,9 +31,8 @@ export default function CredentialsPage() {
       {/* Main Content */}
       <main className="flex-grow bg-gradient-radial py-20 min-h-[80vh]">
         <div className="container mx-auto px-4 max-w-md">
-          <Form />
+          <Box />
         </div>
-        <PageVisitTelemetry />
       </main>
 
       <Footer />

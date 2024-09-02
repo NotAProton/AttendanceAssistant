@@ -22,9 +22,9 @@ export async function getCourses(db: D1Database, year: number, branch: string) {
   const courses = (
     await db
       .prepare(
-        "SELECT course_code FROM courses WHERE (year = ?) AND (branch = ? OR branch = ?)"
+        "SELECT course_code FROM courses WHERE (year = ?) AND (branch = ? OR branch = ? OR branch = ?)"
       )
-      .bind(year, branch, branch?.slice(0, 2))
+      .bind(year, branch, branch?.slice(0, 2), branch?.slice(0, 1))
       .all<CoursesRow>()
   ).results;
 
@@ -54,7 +54,7 @@ export async function getSchedule(
 ) {
   const schedule = await db
     .prepare(
-      "SELECT * FROM schedule WHERE (course_code = ? AND batch = ?) AND (lab_set = ? OR lab_set = 0)"
+      "SELECT * FROM schedule WHERE (course_code = ? AND (batch = ? OR batch = 0)) AND (lab_set = ? OR lab_set = 0)"
     )
     .bind(course, batch, set)
     .first<ScheduleRow>();

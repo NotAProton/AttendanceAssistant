@@ -7,6 +7,7 @@ import {
   getHolidays,
   getSchedule,
 } from "./sql";
+import { getSet } from "./sets";
 
 export const runtime = "edge";
 
@@ -153,9 +154,12 @@ export async function GET(request: NextRequest) {
   }
 
   let responseCourses: ResponseCourse[] = [];
+  const set = getSet(branch, batch, roll);
+  if (!set) {
+    return new Response("Invalid roll number", { status: 400 });
+  }
 
   for (let course of courses) {
-    const set = 6;
     let schedule;
     try {
       schedule = await getSchedule(db, course.course_code, batch, set);
@@ -250,5 +254,6 @@ export async function GET(request: NextRequest) {
     // check if the extra class is before today, add it to classes completed
     // if it is after today, add it to classes remaining
   }
+
   return new Response(JSON.stringify(responseCourses));
 }

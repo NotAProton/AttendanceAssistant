@@ -8,7 +8,7 @@ import {
   Button,
   MantineProvider,
 } from "@mantine/core";
-import { useDataStore } from "../store";
+import { useDataStore } from "../../lib/store";
 
 export default function Form() {
   const form = useForm({
