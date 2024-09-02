@@ -44,12 +44,12 @@ export default function CourseDetails(props: CourseDetailsProps) {
               />
             </div>
           </div>
-          <div className="pt-1 flex flex-row items-center">
+          <div className="pt-1 flex flex-row items-center text-gray-600">
             <span>Classes conducted: </span>
             <span className="grow text-center">{props.classesConducted}</span>
           </div>
         </div>
-        <div>
+        <div className="text-gray-600">
           Your current attendance:{" "}
           <span className="text-textc">
             {roundToTwo((classesAttended / props.classesConducted) * 100)}%
@@ -60,7 +60,7 @@ export default function CourseDetails(props: CourseDetailsProps) {
       <div className="flex flex-row flex-wrap mt-8 gap-1">
         {props.classesCancelled && props.classesCancelled.length > 0 ? (
           <>
-            <div className="w-fit">Classes Cancelled: </div>
+            <div className="w-fit text-gray-600">Classes Cancelled: </div>
             {props.classesCancelled.map((c) => (
               <NegativeDatePill
                 key={
@@ -77,7 +77,7 @@ export default function CourseDetails(props: CourseDetailsProps) {
         )}
       </div>
 
-      <div className="grid sm:grid-rows-1 sm:grid-flow-col justify-start items-center gap-1">
+      <div className="grid sm:grid-rows-1 sm:grid-flow-col justify-start items-center gap-1 text-gray-600">
         {props.extraClasses && props.extraClasses.length > 0 ? (
           <>
             <div className="w-fit">Extra Classes: </div>
@@ -91,12 +91,17 @@ export default function CourseDetails(props: CourseDetailsProps) {
           "No extra classes"
         )}
       </div>
-      <a href="/report" className="text-xs underline decoration-dotted">
+      <a
+        href="/report"
+        className="text-xs underline decoration-dotted text-gray-500"
+      >
         Report incorrect data
       </a>
 
       <div className="mt-8">
-        <div>Classes remaining this semester: {props.classesRemaining}</div>
+        <div className="text-gray-600">
+          Classes remaining this semester: {props.classesRemaining}
+        </div>
         <div className="text-textc">
           Your maximum attendance can be{" "}
           <span className="text-primary">

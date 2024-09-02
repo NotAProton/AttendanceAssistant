@@ -104,7 +104,6 @@ export async function GET(request: NextRequest) {
   for (let i = 1; i < 6; i++) {
     weekdaysLeft.push(countWeekDays([i], new Date(), classesEnd));
   }
-  console.log(weekdaysDone, weekdaysLeft);
   // fetch courses of the year, branch from db
   const db = getRequestContext().env.DB;
 
@@ -204,7 +203,6 @@ export async function GET(request: NextRequest) {
     const classesOnHolidays = holidays.filter(
       (holiday) => schedule[days[holiday.weekday - 1]] > 0
     );
-    console.log(classesOnHolidays);
 
     for (let holiday of classesOnHolidays) {
       if (holiday.date < yesterday) {

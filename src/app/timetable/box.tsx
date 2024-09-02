@@ -16,11 +16,9 @@ export default function Box() {
   const parseTimetable = () => {
     // Add new line after every day if not present
     let newValue = value.replace(/(Mon|Tue|Wed|Thu|Fri)/g, "$1\n");
-    console.log(newValue);
 
     let lines = newValue.split("\n").filter((line) => line.trim());
     lines = lines.map((line) => line.trim());
-    console.log(lines);
     const courseCounts: Record<string, Record<string, number>> = {};
     let currentDay: string = "";
 

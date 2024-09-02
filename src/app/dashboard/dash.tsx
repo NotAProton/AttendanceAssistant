@@ -1,12 +1,11 @@
 "use client";
 import {
   useQuery,
-  useQueryClient,
   QueryClient,
   QueryClientProvider,
 } from "@tanstack/react-query";
 
-import { Accordion } from "@mantine/core";
+import { Accordion, Loader } from "@mantine/core";
 
 import { MantineProvider } from "@mantine/core";
 
@@ -16,7 +15,7 @@ import type {
   rangedHolidays,
 } from "@/app/api/data/route";
 import CourseDetails from "./courseDetails";
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDataStore } from "../../lib/store";
 import getCourseName from "../../lib/courseNames";
 
@@ -45,11 +44,6 @@ async function fetchCourses(lastRollNumber: string) {
 interface Attendance {
   subject: string;
   classesMissed: number;
-}
-
-interface User {
-  rollNumber: string;
-  attendance: Attendance[];
 }
 
 // use for display of -ve classes
@@ -219,7 +213,9 @@ function Courses() {
   return (
     <div>
       {isLoading ? (
-        <p>Loading...</p>
+        <div className="flex justify-center items-center">
+          <Loader color="blue" type="dots" size="xl" />;
+        </div>
       ) : (
         <Accordion
           classNames={{ item: "border-0 rounded-t-xl" }}
