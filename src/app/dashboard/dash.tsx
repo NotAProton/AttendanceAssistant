@@ -35,6 +35,9 @@ async function fetchCourses(lastRollNumber: string) {
   const year = parseInt(lastRollNumber.slice(0, 4), 10);
   const branch = lastRollNumber.slice(4, 7);
   const roll = parseInt(lastRollNumber.slice(7), 10);
+  if (isNaN(year) || isNaN(roll)) {
+    return [];
+  }
   const res = await fetch(
     `/api/data?year=${year}&branch=${branch}&roll=${roll}`
   );

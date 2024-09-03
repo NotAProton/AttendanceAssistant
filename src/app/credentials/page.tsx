@@ -3,7 +3,7 @@ import Form from "./form";
 import Footer from "../../lib/footer";
 import Head from "next/head";
 import { ColorSchemeScript } from "@mantine/core";
-import PageVisitTelemetry from "@/lib/pageVisitTelemetry";
+import PageVisitTelemetry from "@/lib/pageVisit";
 
 export default function CredentialsPage() {
   return (

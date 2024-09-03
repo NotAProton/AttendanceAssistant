@@ -14,6 +14,7 @@ export default function CredentialsPage() {
         <div className="container mx-auto px-4">
           <a href="/" className="flex flex-row items-center">
             <Image
+              unoptimized
               src="/calendar.svg"
               alt="Calendar Logo"
               width={40}
@@ -35,7 +36,7 @@ export default function CredentialsPage() {
         </div>
       </main>
 
-      <Footer />
+      {/* <Footer /> */}
     </div>
   );
 }

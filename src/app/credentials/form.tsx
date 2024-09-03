@@ -1,13 +1,7 @@
 "use client";
 
 import { useForm } from "@mantine/form";
-import {
-  Select,
-  TextInput,
-  PasswordInput,
-  Button,
-  MantineProvider,
-} from "@mantine/core";
+import { Select, TextInput, Button, MantineProvider } from "@mantine/core";
 import { useDataStore } from "../../lib/store";
 
 export default function Form() {
@@ -33,9 +27,34 @@ export default function Form() {
     setLastRollNumber(
       values.year + values.branchCode + values.rollNumber.padStart(4, "0")
     );
-    if (window !== undefined) {
-      window.location.href = "/dashboard";
+    if (typeof window === "undefined") {
+      return;
     }
+
+    let clientId = window.localStorage.getItem("clientId");
+    if (!clientId) {
+      clientId = "web_" + Math.random().toString(36).slice(2);
+      window.localStorage.setItem("clientId", clientId);
+    }
+    const year = values.year;
+    const branchCode = values.branchCode;
+    const batch = parseInt(values.rollNumber) % 3 || 3;
+
+    fetch(
+      `/api/telemetry?trigger=submitCredentials&clientId=${clientId}&value=${year}-${batch}-${branchCode}`,
+      {
+        method: "GET",
+      }
+    )
+      .then(() => {
+        window.location.href = "/dashboard";
+      })
+      .catch(() => {
+        console.error("Failed to send telemetry data");
+        setTimeout(() => {
+          window.location.href = "/dashboard";
+        }, 1000);
+      });
   });
 
   return (

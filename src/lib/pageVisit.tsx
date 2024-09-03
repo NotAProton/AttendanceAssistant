@@ -1,10 +1,15 @@
 "use client";
 
-import { useEffect } from "react";
+import type { EffectCallback } from "react";
+import { useEffect, useRef } from "react";
 
 export default function PageVisitTelemetry() {
+  const hasSentPing = useRef(false);
   useEffect(() => {
     if (typeof window === "undefined") {
+      return;
+    }
+    if (hasSentPing.current) {
       return;
     }
 
@@ -25,6 +30,7 @@ export default function PageVisitTelemetry() {
         method: "GET",
       }
     );
+    hasSentPing.current = true;
   }, []);
   return null;
 }

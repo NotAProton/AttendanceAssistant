@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Dashboard from "./dash";
 import Footer from "../../lib/footer";
-import PageVisitTelemetry from "@/lib/pageVisitTelemetry";
+import PageVisitTelemetry from "@/lib/pageVisit";
 
 export default function CredentialsPage() {
   return (

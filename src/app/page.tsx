@@ -1,7 +1,6 @@
 import Image from "next/image";
-import Link from "next/link";
 import Footer from "../lib/footer";
-import PageVisitTelemetry from "../lib/pageVisitTelemetry";
+import PageVisitTelemetry from "../lib/pageVisit";
 
 export default function LandingPage() {
   return (
@@ -21,30 +20,30 @@ export default function LandingPage() {
               <span className="text-primary">Assistant</span>
             </h1>
             <p className="text-2xl font-bold mb-8">The last one.</p>
-            <Link href="/credentials">
+            <a href="/credentials">
               <button className="bg-primary text-white px-6 py-3 rounded-lg text-lg font-semibold hover:bg-blue-500 transition-all shadow-md hover:shadow-xl">
                 Get Started
               </button>
-            </Link>
+            </a>
           </div>
         </section>
 
         {/* Card Grid */}
         <section className="py-20">
           <div className="container mx-auto px-4">
-            <div className="grid md:grid-cols-3 gap-8">
+            <div className="grid md:grid-cols-3">
               <Card
                 icon={
                   <Image
-                    src="/locked.png"
+                    src="/straight_ruler_3d.png"
                     width={50}
                     height={50}
                     alt="Secure"
                     className="drop-shadow-md"
                   />
                 }
-                title="Secure"
-                description="Your LMS password never leaves your device"
+                title="Unmatched Accuracy"
+                description="Get the most accurate attendance estimate"
               />
               <Card
                 icon={
@@ -95,7 +94,7 @@ function Card({
     <div className="p-6 rounded-lg">
       <div className="flex flex-row items-center gap-2 mb-2">
         {icon}
-        <h3 className="text-4xl font-semibold">{title}</h3>
+        <h3 className="text-4xl font-semibold md:text-2xl">{title}</h3>
       </div>
       <p>{description}</p>
     </div>

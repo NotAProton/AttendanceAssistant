@@ -53,7 +53,14 @@ CREATE TABLE holidays (
 INSERT INTO holidays (date, days, reason)
 VALUES 
     ('2024-08-15', 1, 'Independence Day'),
+    ('2024-08-26', 1, 'Jannnmashtami'),
+    ('2024-09-16', 1, 'Id-e-Milad'),
+    ('2024-09-23', 4, 'Mid Semester Exams'),
+    ('2024-10-02', 1, 'Gandhi Jayanti'),
+    ('2024-10-31', 1, 'Diwali'),
+    ('2024-11-15', 1, 'Guru Nanak Jayanti'),
     ('2024-11-18', 13, 'End Semester Exams');
+
 
 -- Extra table
 CREATE TABLE extra (
