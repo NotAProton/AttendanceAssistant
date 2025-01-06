@@ -91,8 +91,8 @@ export async function GET(request: NextRequest) {
 
   const batch = roll % 3 || 3;
 
-  let classesStartedDate = new Date("2024-08-01");
-  let classesEnd = new Date("2024-11-30");
+  let classesStartedDate = new Date("2025-01-01");
+  let classesEnd = new Date("2025-4-11");
   let weekdaysDone = [];
   const yesterday = new Date();
   yesterday.setDate(yesterday.getDate() - 1);

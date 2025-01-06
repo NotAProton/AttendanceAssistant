@@ -52,14 +52,11 @@ CREATE TABLE holidays (
 -- Add sample data to holidays table
 INSERT INTO holidays (date, days, reason)
 VALUES 
-    ('2024-08-15', 1, 'Independence Day'),
-    ('2024-08-26', 1, 'Jannnmashtami'),
-    ('2024-09-16', 1, 'Id-e-Milad'),
-    ('2024-09-23', 4, 'Mid Semester Exams'),
-    ('2024-10-02', 1, 'Gandhi Jayanti'),
-    ('2024-10-31', 1, 'Diwali'),
-    ('2024-11-15', 1, 'Guru Nanak Jayanti'),
-    ('2024-11-18', 13, 'End Semester Exams');
+    ('2025-02-17', 4, 'Mid Semester Exams'),
+    ('2025-03-14', 1, 'Holi'),
+    ('2025-03-23', 1, 'Apoorv'),
+    ('2025-03-31', 1, 'Eid'),
+    ('2025-04-08', 3, 'Last 3 days');
 
 
 -- Extra table
