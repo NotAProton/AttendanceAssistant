@@ -217,7 +217,7 @@ function Courses() {
     <div>
       {isLoading ? (
         <div className="flex justify-center items-center">
-          <Loader color="blue" type="dots" size="xl" />;
+          <Loader color="blue" type="dots" size="xl" />
         </div>
       ) : (
         <Accordion
